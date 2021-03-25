@@ -5,9 +5,10 @@ const { Transform, PassThrough } = require('stream')
 const { Pool } = require('pg')
 const QueryStream = require('pg-query-stream')
 
-module.exports = ({ url, ssl = false }) => {
+module.exports = ({ url, ssl = true }) => {
   const params = parse(url)
   const auth = (params.auth || '').split(':')
+  console.log("YEEEEEEEEEEEEEEEEAHHHHHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
   const pool = new Pool({
     user: auth[0],
     password: auth[1],

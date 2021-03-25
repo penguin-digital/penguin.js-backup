@@ -53,7 +53,13 @@ function addUser(args) {
     return Promise.reject(
       new Error("No user email given! (e.g. --email me@provider.de")
     );
-  const client = new pg.Client(pgURL);
+  const client = new pg.Client({
+    connectionString: pgURL,
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  });
   return new Promise((resolve, reject) => {
     client.connect((err) => {
       if (err) return reject(err);
@@ -82,7 +88,13 @@ function removeUser(args) {
     return Promise.reject(
       new Error("No user email given! (e.g. --email me@provider.de")
     );
-  const client = new pg.Client(pgURL);
+  const client = new pg.Client({
+    connectionString: pgURL,
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  });
   return new Promise((resolve, reject) => {
     client.connect((err) => {
       if (err) return reject(err);
@@ -109,6 +121,7 @@ function listUsers(args) {
   const client = new pg.Client({
     connectionString: pgURL,
     ssl: {
+      require: true,
       rejectUnauthorized: false,
     },
   });

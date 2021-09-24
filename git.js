@@ -16,6 +16,7 @@ module.exports = args => {
     new Promise((resolve, reject) => {
       // Checkout repository
       fs.mkdtemp('penguin-git-clone-', (err, path) => {
+        console.log("Starting to clone")
         if (err) return reject(err)
         execFile(
           git,
@@ -30,7 +31,9 @@ module.exports = args => {
             path
           ],
           err => {
+            console.log("DONE to clone 1, but still need to check for errors...")
             if (err) return reject(err)
+            console.log("DONE to clone, really now!")
             rimraf(join(output, '.git'), err => {
               if (err) return reject(err)
               fs.rename(join(path, '.git'), join(output, '.git'), err => {
@@ -46,6 +49,7 @@ module.exports = args => {
       })
     }).then(() => {
       return new Promise((resolve, reject) => {
+        console.log("Adding now, stay tuned.")
         spawn(git, ['add', '.'], { stdio: 'inherit', cwd: output })
           .on('error', reject)
           .on('close', code => {
@@ -53,6 +57,7 @@ module.exports = args => {
             commit()
           })
         function commit() {
+          console.log("Committing")
           execFile(
             git,
             [
@@ -73,6 +78,7 @@ module.exports = args => {
           )
         }
         function push() {
+          console.log("Pushing really hard...")
           execFile(git, ['push', url, branch], { cwd: output }, err => {
             if (err) return reject(err)
             resolve()

@@ -79,10 +79,17 @@ module.exports = args => {
         }
         function push() {
           console.log("Pushing really hard...")
-          execFile(git, ['push', url, branch], { cwd: output }, err => {
-            if (err) return reject(err)
+          spawn(git, ['push', url, branch], { stdio: 'inherit', cwd: output })
+          .on('error', reject)
+          .on('close', code => {
+            if (code !== 0) return reject(new Error(code))
             resolve()
           })
+          
+//           execFile(git, ['push', url, branch], { cwd: output }, err => {
+//             if (err) return reject(err)
+//             resolve()
+//           })
         }
       })
     })
